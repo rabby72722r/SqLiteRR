@@ -1,6 +1,7 @@
 package com.example.rabby.sqliterr;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,8 +10,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,6 +106,64 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+
+        if (id == R.id.homeBtnId) {
+
+            // -- home button click from actionbar
+            Intent home= new Intent(MainActivity.this,MainActivity.class);
+            startActivity(home);
+
+            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (id == R.id.aboutUsId) {
+            // --- about us button click from actionbar
+            Intent about= new Intent(this,HelpActivity.class);
+            startActivity(about);
+            return true;
+        }
+
+        if (id == R.id.SettingsId) {
+            // ---- log out button click from actionbar
+            Intent settings= new Intent(this,SettingsActivity.class);
+            startActivity(settings);
+
+            return true;
+        }
+
+        if (id == R.id.FeedbackId) {
+            // ---- log out button click from actionbar
+            Intent feedback= new Intent(this,FeedBack.class);
+            startActivity(feedback);
+
+            return true;
+        }
+
+        if (id == R.id.exitId) {
+
+            // ---- exit button click from actionbar
+            showDailog();
+            // finish();
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     public static byte[] imageViewToByte(ImageView image) {
         Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
@@ -151,5 +213,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDailog();
+    }
+    private void showDailog(){
+        final AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.exit);
+        builder.setTitle("Exit ?");
+        builder.setMessage("Are you sure to Exit ?");
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.create().show();
     }
 }
